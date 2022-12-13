@@ -21,8 +21,8 @@ class ProbabilisticMatrixFactorization:
         self.N, self.M = self.R.shape
         self.U, self.V = self.__get_initial_estimation()
         self.__gradient_descent()
-        self.R = np.dot(self.U, self.V)
-        self.__min_max_scaling()
+        #self.R = np.dot(self.U, self.V)
+        #self.__min_max_scaling()
 
     def __get_initial_estimation(self):
         return np.zeros(shape=(self.N, self.D)), np.random.normal(0.0, 1.0 / (self.sigma_v/self.sigma), (self.D, self.M))
