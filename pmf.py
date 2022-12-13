@@ -29,11 +29,19 @@ class ProbabilisticMatrixFactorization:
             for i in range(self.N):
                 self.U[i, :] = self.U[i, :] - self.learning_rate * self.__get_U_gradient(i)
             for j in range(self.M):
-                self.V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)            
+                self.V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)  
+            print(f'Epoch-{t}')          
     
     def __get_U_gradient(self, i):
         I_ij = np.copy(self.R[i, :])
         I_ij[np.where(I_ij > 0)] = 1
         aux_1 = I_ij * (self.R[i, :] - np.dot(self.U[i, :], self.V))
         aux_2 = aux_1 * self.V
-        return (1 / self.sigma) * np.sum(aux_2, axis = 1) + (self.U[i, :] / self.sigma_u)
+        return (1 / self.sigma) * np.sum(aux_2, axis=1) + (self.U[i, :] / self.sigma_u)
+
+    def __get_V_gradient(self, j):
+        I_ij = np.copy(self.R[:, j])
+        I_ij[np.where(I_ij) > 0] = 1
+        aux_1 = I_ij * (self.R[:, j] - np.dot(self.U, self.V[:, j]))
+        aux_2 = (aux_1 * self.U.T).T
+        return (1 / self.sigma) * np.sum(aux_2, axis=1) + (self.V[:, j] / self.sigma_v)
