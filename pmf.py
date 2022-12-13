@@ -21,17 +21,20 @@ class ProbabilisticMatrixFactorization:
         self.N, self.M = self.R.shape
         self.U, self.V = self.__get_initial_estimation()
         self.__gradient_descent()
+        self.R = np.dot(self.U, self.V)
 
     def __get_initial_estimation(self):
         return np.zeros(shape=(self.N, self.D)), np.zeros(shape=(self.D, self.M))
     
     def __gradient_descent(self):
+        aux_U, aux_V = np.zeros(shape=(self.N, self.D)), np.zeros(shape=(self.D, self.M))
         for t in range(self.max_epochs):
             for i in range(self.N):
-                self.U[i, :] = self.U[i, :] - self.learning_rate * self.__get_U_gradient(i)
+                aux_U[i, :] = self.U[i, :] - self.learning_rate * self.__get_U_gradient(i)
             for j in range(self.M):
-                self.V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)  
-            print(f'Epoch-{t}')          
+                aux_V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)  
+            print(f'Epoch-{t}')
+            self.U, self.V = aux_U, aux_V          
     
     def __get_U_gradient(self, i):
         # I_ij -> 1 x M
