@@ -34,7 +34,9 @@ class ProbabilisticMatrixFactorization:
             for j in range(self.M):
                 aux_V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)  
             print(f'Epoch-{t}')
-            self.U, self.V = aux_U, aux_V          
+            self.U, self.V = aux_U, aux_V
+            print(self.U)
+            print(self.V)          
     
     def __get_U_gradient(self, i):
         # I_ij -> 1 x M
@@ -54,7 +56,7 @@ class ProbabilisticMatrixFactorization:
     def __get_V_gradient(self, j):
         # I_ij -> 1 x M
         I_ij = np.copy(self.R[:, j])
-        I_ij[np.where(I_ij) > 0] = 1
+        I_ij[np.where(I_ij > 0)] = 1
         # self.R[:, j] -> 1 x N
         # self.U -> N x D
         # self.V[:, j] -> 1 x D
