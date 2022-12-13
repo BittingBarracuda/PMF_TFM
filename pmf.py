@@ -3,9 +3,9 @@ import numpy as np
 class ProbabilisticMatrixFactorization:
     def __init__(self, 
                     D = 30,
-                    sigma = 0.3, 
-                    sigma_u = 0.3, 
-                    sigma_v = 0.3, 
+                    sigma = 0.1, 
+                    sigma_u = 0.1, 
+                    sigma_v = 0.1, 
                     learning_rate = 0.01, 
                     max_epochs = 1000
                 ):
@@ -39,13 +39,13 @@ class ProbabilisticMatrixFactorization:
                 aux_U[i, :] = self.U[i, :] - self.learning_rate * self.__get_U_gradient(i)
             for j in range(self.M):
                 aux_V[:, j] = self.V[:, j] - self.learning_rate * self.__get_V_gradient(j)  
-            print(f'Epoch-{t+1}')
+            print(f'\tEpoch-{t+1}...')
             self.U, self.V = aux_U, aux_V        
     
     def __get_U_gradient(self, i):
         # I_ij -> 1 x M
         I_ij = np.copy(self.R[i, :])
-        I_ij[np.where(I_ij > 0)] = 1
+        I_ij[I_ij > 0] = 1
         # self.R[i, :] -> 1 x M
         # self.U[i, :] -> 1 x D
         # self.V -> D x M
@@ -60,7 +60,7 @@ class ProbabilisticMatrixFactorization:
     def __get_V_gradient(self, j):
         # I_ij -> 1 x M
         I_ij = np.copy(self.R[:, j])
-        I_ij[np.where(I_ij > 0)] = 1
+        I_ij[I_ij > 0] = 1
         # self.R[:, j] -> 1 x N
         # self.U -> N x D
         # self.V[:, j] -> 1 x D
