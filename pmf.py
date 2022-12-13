@@ -20,6 +20,7 @@ class ProbabilisticMatrixFactorization:
         self.R = R
         self.N, self.M = self.R.shape
         self.U, self.V = self.__get_initial_estimation()
+        self.__gradient_descent()
 
     def __get_initial_estimation(self):
         return np.zeros(shape=(self.N, self.D)), np.zeros(shape=(self.D, self.M))
